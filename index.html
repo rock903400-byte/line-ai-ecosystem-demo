@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE AI 生態系 · 基層金融機構數位轉型引擎</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a1a;
+            --surface: rgba(255,255,255,0.04);
+            --surface-hover: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.08);
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --green: #22d3ee;
+            --green-glow: rgba(34,211,238,0.15);
+            --blue: #818cf8;
+            --purple: #a78bfa;
+            --pink: #f472b6;
+            --orange: #fb923c;
+            --gradient-1: linear-gradient(135deg, #22d3ee, #818cf8);
+            --gradient-2: linear-gradient(135deg, #818cf8, #a78bfa);
+            --gradient-3: linear-gradient(135deg, #f472b6, #818cf8);
+            --gradient-warm: linear-gradient(135deg, #fb923c, #f472b6);
+            --radius: 20px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── Ambient ─── */
+        .ambient {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 0;
+            overflow: hidden;
+        }
+        .ambient .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(120px); opacity: 0.12;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .ambient .orb:nth-child(1) {
+            width: 600px; height: 600px;
+            background: #22d3ee;
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+        .ambient .orb:nth-child(2) {
+            width: 500px; height: 500px;
+            background: #fb923c;
+            bottom: -10%; right: -10%;
+            animation-delay: -7s;
+        }
+        .ambient .orb:nth-child(3) {
+            width: 400px; height: 400px;
+            background: #f472b6;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            animation-delay: -14s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33% { transform: translate(60px,-40px) scale(1.1); }
+            66% { transform: translate(-30px,50px) scale(0.9); }
+        }
+
+        .grid-overlay {
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+
+        /* ─── Nav ─── */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(10,10,26,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 60px;
+            padding: 10px 24px;
+            display: flex; gap: 4px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        nav a {
+            text-decoration: none; color: var(--text-dim);
+            padding: 8px 18px; border-radius: 40px;
+            font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            white-space: nowrap;
+        }
+        nav a:hover { color: var(--text); background: var(--surface-hover); }
+        nav a.active {
+            background: var(--gradient-1);
+            color: #0a0a1a; font-weight: 700;
+            box-shadow: 0 4px 20px var(--green-glow);
+        }
+
+        /* ─── Section ─── */
+        section {
+            padding: 100px 40px;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center;
+        }
+        .section-label {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 4px;
+            color: var(--green); font-weight: 500; text-align: center; margin-bottom: 12px;
+        }
+        h2 {
+            font-size: 3rem; font-weight: 900; text-align: center;
+            margin-bottom: 16px; line-height: 1.2;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .desc {
+            text-align: center; color: var(--text-dim);
+            max-width: 600px; margin: 0 auto 60px;
+            font-size: 1.05rem; line-height: 1.8;
+        }
+
+        /* ─── Hero ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 40px; position: relative;
+        }
+        .hero .logo-wrap {
+            width: 100px; height: 100px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; margin-bottom: 30px;
+            position: relative;
+            box-shadow: 0 0 60px var(--green-glow);
+        }
+        .hero .logo-wrap::after {
+            content: ""; position: absolute; inset: -4px;
+            border-radius: 34px;
+            background: var(--gradient-1);
+            z-index: -1; opacity: 0.5;
+            filter: blur(8px);
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .hero h1 {
+            font-size: 4.5rem; font-weight: 900; line-height: 1.1;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        .hero h1 .highlight {
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero .tagline {
+            font-size: 1.3rem; color: var(--text-dim);
+            max-width: 540px; margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        .hero .badges { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .hero .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            font-size: 0.85rem; color: var(--text-dim);
+        }
+        .hero .badge .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--green);
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+        @keyframes dotPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .hero .scroll-hint {
+            position: absolute; bottom: 40px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            color: var(--text-dim); font-size: 0.75rem; letter-spacing: 2px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        .hero .scroll-hint .line {
+            width: 1px; height: 40px;
+            background: linear-gradient(180deg, var(--text-dim), transparent);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* ─── Grid Cards ─── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .card:hover {
+            background: var(--surface-hover);
+            transform: translateY(-6px);
+            border-color: rgba(34,211,238,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .card:hover::before { opacity: 1; }
+        .card .icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; margin-bottom: 18px;
+            position: relative;
+        }
+        .card .icon::after {
+            content: ""; position: absolute; inset: 0; border-radius: 14px;
+            background: var(--gradient-1); opacity: 0.15;
+        }
+        .card h3 {
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 10px;
+            letter-spacing: 0.3px;
+        }
+        .card p { color: var(--text-dim); font-size: 0.92rem; line-height: 1.7; }
+
+        /* ─── Data Grid ─── */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .data-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+            position: relative; overflow: hidden;
+        }
+        .data-card::before {
+            content: ""; position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at center, var(--green-glow) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .data-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(34,211,238,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .data-card:hover::before { opacity: 1; }
+        .data-card * { position: relative; z-index: 1; }
+        .data-card .num {
+            font-size: 2.6rem; font-weight: 900; letter-spacing: -1px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        .data-card .lbl { font-size: 0.9rem; color: var(--text-dim); }
+
+        /* ─── Phone Mockup ─── */
+        .phone-wrap {
+            display: flex; justify-content: center; gap: 30px;
+            flex-wrap: wrap; margin-top: 20px;
+        }
+        .phone {
+            width: 280px; flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 36px;
+            padding: 12px;
+            position: relative;
+            transition: all 0.5s;
+        }
+        .phone:hover {
+            transform: translateY(-8px);
+            border-color: rgba(34,211,238,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .phone .notch {
+            width: 100px; height: 24px;
+            background: var(--bg);
+            border-radius: 0 0 16px 16px;
+            margin: 0 auto 8px;
+        }
+        .phone .screen {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 20px 16px;
+            min-height: 500px;
+        }
+        .phone .screen .status-bar {
+            display: flex; justify-content: space-between;
+            font-size: 0.7rem; color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+        .phone .screen .app-header {
+            font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .phone .screen .map-area {
+            height: 160px;
+            background: radial-gradient(ellipse at 30% 40%, rgba(34,211,238,0.15) 0%, transparent 60%),
+                        rgba(255,255,255,0.03);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .phone .screen .map-area .marker {
+            position: absolute; width: 28px; height: 28px;
+            background: var(--gradient-1); border-radius: 50%;
+            box-shadow: 0 0 20px var(--green-glow), 0 0 0 4px rgba(34,211,238,0.15);
+            animation: markerPulse 2s ease-in-out infinite;
+        }
+        .phone .screen .map-area .marker:nth-child(1) { top: 25%; left: 20%; }
+        .phone .screen .map-area .marker:nth-child(2) { top: 55%; left: 55%; animation-delay: 0.5s; }
+        .phone .screen .map-area .marker:nth-child(3) { top: 35%; left: 75%; animation-delay: 1s; }
+        .phone .screen .map-area .marker:nth-child(4) { top: 65%; left: 35%; animation-delay: 1.5s; }
+        @keyframes markerPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        .phone .screen .map-area .map-label {
+            font-size: 0.7rem; color: var(--text-dim); opacity: 0.5;
+            pointer-events: none;
+        }
+        .phone .screen .cat-row {
+            display: flex; gap: 6px; margin-bottom: 12px;
+            overflow-x: auto; padding-bottom: 4px;
+        }
+        .phone .screen .cat-chip {
+            flex-shrink: 0; padding: 4px 12px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            font-size: 0.65rem; color: var(--text-dim);
+            white-space: nowrap;
+        }
+        .phone .screen .cat-chip.active {
+            background: rgba(34,211,238,0.12);
+            color: var(--green);
+        }
+        .phone .screen .store-row {
+            display: flex; gap: 10px; margin-bottom: 10px;
+            padding: 10px; background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+        }
+        .phone .screen .store-row .thumb {
+            width: 44px; height: 44px; flex-shrink: 0;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.08);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .phone .screen .store-row .s-info { flex: 1; min-width: 0; }
+        .phone .screen .store-row .s-info .s-name { font-size: 0.8rem; font-weight: 500; }
+        .phone .screen .store-row .s-info .s-dist { font-size: 0.65rem; color: var(--text-dim); }
+        .phone .screen .store-row .s-tag {
+            font-size: 0.6rem; padding: 2px 8px;
+            background: rgba(34,211,238,0.08);
+            border-radius: 20px; color: var(--green);
+            align-self: center;
+        }
+
+        .phone .screen .divider {
+            height: 1px; background: var(--border);
+            margin: 12px 0;
+        }
+
+        .phone .screen .prod-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            margin-bottom: 12px;
+        }
+        .phone .screen .prod-card {
+            background: rgba(255,255,255,0.02); border-radius: 12px;
+            padding: 10px; text-align: center;
+        }
+        .phone .screen .prod-card .p-img {
+            width: 100%; height: 56px;
+            background: rgba(251,146,60,0.08); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 6px;
+        }
+        .phone .screen .prod-card .p-name { font-size: 0.7rem; font-weight: 500; }
+        .phone .screen .prod-card .p-price { font-size: 0.75rem; color: var(--orange); font-weight: 700; }
+        .phone .screen .prod-card .p-tier {
+            font-size: 0.55rem; padding: 2px 6px;
+            background: rgba(251,146,60,0.1); color: var(--orange);
+            border-radius: 10px; display: inline-block; margin-top: 4px;
+        }
+        .phone .screen .cart-bar {
+            background: rgba(34,211,238,0.06);
+            border: 1px solid rgba(34,211,238,0.1);
+            border-radius: 12px; padding: 10px 14px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .phone .screen .cart-bar .cart-total { font-size: 0.85rem; font-weight: 700; }
+        .phone .screen .cart-bar .cart-badge {
+            background: var(--green); color: #0a0a1a;
+            font-size: 0.65rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 20px;
+        }
+
+        .phone .screen .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            max-width: 85%;
+            font-size: 0.75rem; line-height: 1.6;
+        }
+        .phone .screen .chat-bubble.ai {
+            background: rgba(34,211,238,0.08);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+        .phone .screen .chat-bubble.user {
+            background: rgba(129,140,248,0.12);
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+        }
+        .phone .screen .chat-input {
+            display: flex; gap: 8px; margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+        }
+        .phone .screen .chat-input .input-placeholder {
+            flex: 1; font-size: 0.7rem; color: var(--text-dim);
+        }
+        .phone .screen .chat-input .send-btn {
+            width: 28px; height: 28px;
+            background: var(--gradient-1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .phone-label {
+            text-align: center; font-size: 0.8rem;
+            color: var(--text-dim); margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        /* ─── LINE Flow ─── */
+        .line-flow {
+            display: flex; gap: 20px;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .flow-step {
+            flex: 1; min-width: 180px; max-width: 260px;
+            text-align: center;
+            padding: 28px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            transition: all 0.4s;
+        }
+        .flow-step:hover {
+            transform: translateY(-4px);
+            border-color: rgba(34,211,238,0.3);
+        }
+        .flow-step .step-num {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            color: #0a0a1a;
+            font-weight: 700; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px;
+        }
+        .flow-step h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .flow-step p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+        .flow-arrow {
+            display: flex; align-items: center;
+            font-size: 1.5rem; color: var(--text-dim);
+            opacity: 0.3;
+        }
+        @media (max-width: 768px) {
+            .flow-arrow { display: none; }
+        }
+
+        /* ─── Features Row ─── */
+        .feature-row {
+            display: flex; align-items: center; gap: 40px;
+            padding: 40px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            transition: all 0.4s;
+        }
+        .feature-row:hover {
+            background: var(--surface-hover);
+            border-color: rgba(34,211,238,0.2);
+            transform: translateX(6px);
+        }
+        .feature-row .f-icon {
+            width: 64px; height: 64px; flex-shrink: 0;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.12);
+        }
+        .feature-row .f-body { flex: 1; }
+        .feature-row .f-body h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+        .feature-row .f-body p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
+        .feature-row .f-tag {
+            font-size: 0.7rem; padding: 4px 14px;
+            border-radius: 20px;
+            background: var(--green-glow);
+            color: var(--green);
+            white-space: nowrap;
+        }
+
+        /* ─── Moat Grid ─── */
+        .moat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .moat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+            position: relative; overflow: hidden;
+        }
+        .moat-card::before {
+            content: ""; position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--gradient-1);
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
+        .moat-card:hover {
+            background: var(--surface-hover);
+            transform: translateY(-4px);
+            border-color: rgba(34,211,238,0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .moat-card:hover::before { opacity: 1; }
+        .moat-card .m-icon { font-size: 1.6rem; margin-bottom: 10px; }
+        .moat-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .moat-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+        .moat-card .m-meta {
+            margin-top: 12px; font-size: 0.7rem;
+            padding: 4px 10px; background: rgba(34,211,238,0.06);
+            border-radius: 20px; display: inline-block;
+            color: var(--green);
+        }
+        @media (max-width: 768px) {
+            .moat-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ─── Traction Row ─── */
+        .traction-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .traction-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.4s;
+        }
+        .traction-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(34,211,238,0.2);
+        }
+        .traction-item .t-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .traction-item .t-num {
+            font-size: 1.6rem; font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .traction-item .t-label { font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; }
+        @media (max-width: 768px) {
+            .traction-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ─── Business Model ─── */
+        .bm-path {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .bm-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            transition: all 0.4s;
+        }
+        .bm-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(34,211,238,0.2);
+        }
+        .bm-card .bm-phase {
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--green); margin-bottom: 6px;
+        }
+        .bm-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+        .bm-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+        .bm-card .bm-rev {
+            margin-top: 12px;
+            font-size: 0.8rem; color: var(--orange); font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .bm-path { grid-template-columns: 1fr; }
+        }
+
+        /* ─── Timeline ─── */
+        .tl-wrap {
+            position: relative; max-width: 700px; margin: 0 auto;
+        }
+        .tl-wrap::before {
+            content: ""; position: absolute; left: 28px; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--green), var(--blue), var(--purple), var(--pink));
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+        .tl-item {
+            padding-left: 76px; position: relative; margin-bottom: 40px;
+        }
+        .tl-item:last-child { margin-bottom: 0; }
+        .tl-item .dot {
+            position: absolute; left: 16px; top: 4px;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--green);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px var(--green-glow);
+        }
+        .tl-item .dot::after {
+            content: ""; width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+        .tl-item:nth-child(2) .dot { border-color: var(--blue); }
+        .tl-item:nth-child(2) .dot::after { background: var(--blue); }
+        .tl-item:nth-child(3) .dot { border-color: var(--orange); }
+        .tl-item:nth-child(3) .dot::after { background: var(--orange); }
+        .tl-item:nth-child(4) .dot { border-color: var(--pink); }
+        .tl-item:nth-child(4) .dot::after { background: var(--pink); }
+
+        .tl-item .phase {
+            font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--green); margin-bottom: 4px;
+        }
+        .tl-item:nth-child(2) .phase { color: var(--blue); }
+        .tl-item:nth-child(3) .phase { color: var(--orange); }
+        .tl-item:nth-child(4) .phase { color: var(--pink); }
+
+        .tl-item h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .tl-item p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.7; }
+
+        /* ─── CTA ─── */
+        .cta {
+            padding: 120px 40px;
+            text-align: center;
+            position: relative;
+        }
+        .cta h2 { font-size: 3.5rem; margin-bottom: 20px; }
+        .cta p { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 40px; }
+        .cta .btn-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .cta .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 16px 40px;
+            border-radius: 60px;
+            font-size: 1rem; font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            cursor: pointer;
+        }
+        .cta .btn-primary {
+            background: var(--gradient-1);
+            color: #0a0a1a;
+            box-shadow: 0 8px 32px var(--green-glow);
+        }
+        .cta .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 48px var(--green-glow);
+        }
+        .cta .btn-secondary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .cta .btn-secondary:hover {
+            background: var(--surface-hover);
+            transform: scale(1.05);
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            padding: 40px; text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim); font-size: 0.82rem;
+        }
+
+        /* ─── Animations ─── */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-scale {
+            opacity: 0; transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .stagger > * { transition-delay: calc(var(--i,0) * 0.1s); }
+
+        /* ─── Mobile ─── */
+        @media (max-width: 768px) {
+            section { padding: 80px 24px; }
+            .hero h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            .data-grid { grid-template-columns: repeat(2, 1fr); }
+            .feature-row { flex-direction: column; text-align: center; padding: 24px; }
+            .phone { width: 240px; }
+            nav {
+                top: auto; bottom: 20px;
+                padding: 8px 12px; gap: 2px;
+                overflow-x: auto;
+                max-width: calc(100vw - 40px);
+            }
+            nav a { font-size: 0.75rem; padding: 6px 12px; white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<nav>
+    <a href="#market">市場</a>
+    <a href="#products">產品</a>
+    <a href="#features">功能</a>
+    <a href="#moat">護城河</a>
+    <a href="#business">商業</a>
+    <a href="#roadmap">路徑</a>
+</nav>
+
+<div class="wrap">
+
+    <!-- ═══ Hero ═══ -->
+    <div class="hero" id="top">
+        <div class="logo-wrap">🤝</div>
+        <h1>LINE AI <span class="highlight">生態系</span></h1>
+        <p class="tagline">
+            台灣 300+ 基層金融機構的數位轉型引擎<br>
+            打開 LINE，就是 20 萬會員的互助網絡
+        </p>
+        <div class="badges">
+            <span class="badge"><span class="dot"></span> 已上線營運</span>
+            <span class="badge">📱 2 個 LINE  APP</span>
+            <span class="badge">🧪 320 項自動化測試</span>
+            <span class="badge">🤖 Gemini AI + 記憶</span>
+        </div>
+        <div class="scroll-hint">
+            <span>往下看</span>
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <!-- ═══ 市場痛點 ═══ -->
+    <section id="market">
+        <div class="reveal"><div class="section-label">Market & Problem</div></div>
+        <div class="reveal"><h2>20 萬會員等待的數位轉型</h2></div>
+        <div class="reveal"><p class="desc">台灣 300+ 基層金融機構，20 萬會員，每年數百億的儲蓄規模 — 卻還卡在紙本與 Access DB 的時代。</p></div>
+
+        <div class="data-grid stagger">
+            <div class="data-card reveal" style="--i:0">
+                <div class="num">300+</div>
+                <div class="lbl">全台合作機構</div>
+            </div>
+            <div class="data-card reveal" style="--i:1">
+                <div class="num">20 萬+</div>
+                <div class="lbl">會員人數</div>
+            </div>
+            <div class="data-card reveal" style="--i:2">
+                <div class="num">50+</div>
+                <div class="lbl">會員平均年齡</div>
+            </div>
+        </div>
+
+        <div class="grid reveal" style="margin-top:20px;">
+            <div class="card" style="--i:0">
+                <div class="icon">😌</div>
+                <h3>會員嚴重老化</h3>
+                <p>多數會員超過 50 歲，年輕人不認識這類機構。新血斷層讓 300+ 家面臨存續危機。</p>
+            </div>
+            <div class="card" style="--i:1">
+                <div class="icon">📠</div>
+                <h3>1980 年代的作業方式</h3>
+                <p>會員資料還在 Microsoft Access DB（CUB.MDB）管理，無任何數位會員服務。</p>
+            </div>
+            <div class="card" style="--i:2">
+                <div class="icon">📱</div>
+                <h3>LINE 世代已到來</h3>
+                <p>台灣 LINE 滲透率 98%，會員每天打開 LINE 但沒有任何機構端數位服務 —— 巨大的數位缺口。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 產品展示 ═══ -->
+    <section id="products">
+        <div class="reveal"><div class="section-label">Products</div></div>
+        <div class="reveal"><h2>三大產品 · 一條 LINE 搞定</h2></div>
+        <div class="reveal"><p class="desc">不用下載 APP，LINE 裡直接體驗完整的會員數位服務</p></div>
+
+        <div class="reveal">
+            <div class="line-flow">
+                <div class="flow-step">
+                    <div class="step-num">1</div>
+                    <div style="font-size:1.6rem;margin-bottom:10px;">🔗</div>
+                    <h4>打開 LINE</h4>
+                    <p>從 LIFF 連結進入，不必下載 APP，打開即用</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-num">2</div>
+                    <div style="font-size:1.6rem;margin-bottom:10px;">🔐</div>
+                    <h4>身分驗證</h4>
+                    <p>身分證末四碼驗證 + LINE ID 綁定，安全快速</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-num">3</div>
+                    <div style="font-size:1.6rem;margin-bottom:10px;">🏠</div>
+                    <h4>三大服務入口</h4>
+                    <p>特約商店地圖 / 共購團購 / AI 小助，一站切換</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="phone-wrap">
+            <!-- Phone 1: 特約商店 -->
+            <div class="reveal">
+                <div class="phone">
+                    <div class="notch"></div>
+                    <div class="screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">🏪 特約商店</div>
+                        <div class="map-area">
+                            <div class="marker"></div>
+                            <div class="marker"></div>
+                            <div class="marker"></div>
+                            <div class="marker"></div>
+                            <span class="map-label">📍 Leaflet 地圖 · 附近特約店</span>
+                        </div>
+                        <div class="cat-row">
+                            <span class="cat-chip active">🍜 全部</span>
+                            <span class="cat-chip">🍽️ 餐飲</span>
+                            <span class="cat-chip">🛍️ 百貨</span>
+                            <span class="cat-chip">🏥 健康</span>
+                            <span class="cat-chip">🎮 娛樂</span>
+                        </div>
+                        <div class="store-row">
+                            <div class="thumb">🍜</div>
+                            <div class="s-info">
+                                <div class="s-name">阿宏牛肉麵</div>
+                                <div class="s-dist">距離 350m · 會員 9 折</div>
+                            </div>
+                            <span class="s-tag">⭐ 收藏</span>
+                        </div>
+                        <div class="store-row">
+                            <div class="thumb">☕</div>
+                            <div class="s-info">
+                                <div class="s-name">鹿草咖啡</div>
+                                <div class="s-dist">距離 1.2km · 會員 85 折</div>
+                            </div>
+                            <span class="s-tag">⭐ 收藏</span>
+                        </div>
+                        <div class="store-row">
+                            <div class="thumb">🏪</div>
+                            <div class="s-info">
+                                <div class="s-name">百成生活百貨</div>
+                                <div class="s-dist">距離 2.0km · 會員 95 折</div>
+                            </div>
+                            <span class="s-tag">⭐ 收藏</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-label">🏪 特約商店 · 地圖找優惠</div>
+            </div>
+
+            <!-- Phone 2: 共購 -->
+            <div class="reveal" style="transition-delay:0.2s">
+                <div class="phone">
+                    <div class="notch"></div>
+                    <div class="screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">🛒 共購團購</div>
+                        <div class="prod-grid">
+                            <div class="prod-card">
+                                <div class="p-img">🍚</div>
+                                <div class="p-name">台東池上米 10kg</div>
+                                <div class="p-price">NT$ 680</div>
+                                <span class="p-tier">已售 42 件</span>
+                            </div>
+                            <div class="prod-card">
+                                <div class="p-img">🧴</div>
+                                <div class="p-name">洗衣精補充包</div>
+                                <div class="p-price">NT$ 180</div>
+                                <span class="p-tier">已售 86 件</span>
+                            </div>
+                            <div class="prod-card">
+                                <div class="p-img">📱</div>
+                                <div class="p-name">快充行動電源</div>
+                                <div class="p-price">NT$ 890</div>
+                                <span class="p-tier">🔥 熱銷</span>
+                            </div>
+                            <div class="prod-card">
+                                <div class="p-img">🥜</div>
+                                <div class="p-name">堅果禮盒組</div>
+                                <div class="p-price">NT$ 390</div>
+                                <span class="p-tier">即將結單</span>
+                            </div>
+                        </div>
+                        <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px;">
+                            階梯折扣：滿 20 件 95 折 · 滿 50 件 9 折 · 滿 100 件 85 折
+                        </div>
+                        <div class="cart-bar">
+                            <span>🛒 購物車</span>
+                            <span class="cart-total">NT$ 1,520</span>
+                            <span class="cart-badge">3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-label">🛒 共購 · 團購力量大</div>
+            </div>
+
+            <!-- Phone 3: AI 小助 -->
+            <div class="reveal" style="transition-delay:0.4s">
+                <div class="phone">
+                    <div class="notch"></div>
+                    <div class="screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>📶 🔋</span>
+                        </div>
+                        <div class="app-header">🤖 小助</div>
+                        <div style="display:flex;flex-direction:column;">
+                            <div class="chat-bubble ai">
+                                <span style="font-size:0.6rem;color:var(--green);">小助 · 剛剛</span><br>
+                                哈囉！你上次說想找嘉義的米店，<br>
+                                我看到鹿草那間「豐收米行」最近<br>
+                                在共購上開團喔，會員價 NT$580！
+                            </div>
+                            <div class="chat-bubble user" style="margin-top:8px;">
+                                <span style="font-size:0.6rem;color:var(--blue);">我 · 剛剛</span><br>
+                                真的嗎？我上次去看覺得不錯，<br>
+                                幫我加到購物車！
+                            </div>
+                            <div class="chat-bubble ai" style="margin-top:8px;">
+                                <span style="font-size:0.6rem;color:var(--green);">小助 · 剛剛</span><br>
+                                沒問題！已幫你加入 🛒<br>
+                                目前這團已經 62 件了，再 38 件<br>
+                                就可以到 85 折喔！
+                            </div>
+                            <div class="chat-input">
+                                <span class="input-placeholder">問小助有關共購、特約商店的問題...</span>
+                                <div class="send-btn">➤</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:16px;padding:12px;background:rgba(34,211,238,0.04);border-radius:12px;border:1px solid rgba(34,211,238,0.08);">
+                            <div style="display:flex;justify-content:space-between;font-size:0.75rem;">
+                                <span>🎯 會員中心</span>
+                                <span style="color:var(--green);">🔥 連續簽到 7 天</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);margin-top:4px;">
+                                <span>點數 280 · 排行 #12</span>
+                                <span>📝 今日答題 +5 點</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-label">🤖 AI 小助 · 有記憶的會員助理</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 核心功能 ═══ -->
+    <section id="features">
+        <div class="reveal"><div class="section-label">Features</div></div>
+        <div class="reveal"><h2>從找到店到買到便宜，一條龍</h2></div>
+        <div class="reveal"><p class="desc">不是取代原有機構，而是讓會員身份在 LINE 上更有價值</p></div>
+
+        <div class="reveal">
+            <div class="feature-row">
+                <div class="f-icon">🏪</div>
+                <div class="f-body">
+                    <h3>特約商店地圖</h3>
+                    <p>Leaflet 地圖 + marker 聚合，10 大分類篩選。會員專屬折扣一目瞭然，收藏同步 localStorage ↔ Firestore。</p>
+                </div>
+                <span class="f-tag">React + Leaflet</span>
+            </div>
+            <div class="feature-row">
+                <div class="f-icon">🛒</div>
+                <div class="f-body">
+                    <h3>共購階梯團購</h3>
+                    <p>20 / 50 / 100 件階梯折扣，滿單自動計算最終價。商品從推薦 → 審核 → 上架 → 結單完整生命週期，利潤分潤機制內建。</p>
+                </div>
+                <span class="f-tag">交易引擎</span>
+            </div>
+            <div class="feature-row">
+                <div class="f-icon">🤖</div>
+                <div class="f-body">
+                    <h3>AI 小助 · 有記憶的助理</h3>
+                    <p>Gemini 2.5 Flash + Pinecone 向量記憶，小助記得你問過什麼、喜歡什麼。多模型備援，每日配額管理，敏感資訊防護，99% 可靠度。</p>
+                </div>
+                <span class="f-tag">Gemini + RAG</span>
+            </div>
+            <div class="feature-row">
+                <div class="f-icon">🎯</div>
+                <div class="f-body">
+                    <h3>會員中心 · 點數與任務</h3>
+                    <p>每日簽到、答題賺點數，連續天數獎勵。機構內排行榜良性競爭，點數與會員身份深度綁定。</p>
+                </div>
+                <span class="f-tag">遊戲化</span>
+            </div>
+            <div class="feature-row">
+                <div class="f-icon">🔐</div>
+                <div class="f-body">
+                    <h3>三層權限 · 互不干擾</h3>
+                    <p>會員（身分證末四碼）、店家管理員、機構專職幹部 — 三種身分完全隔離。Firestore rules 查詢層級守護資料安全。</p>
+                </div>
+                <span class="f-tag">多租戶安全</span>
+            </div>
+            <div class="feature-row">
+                <div class="f-icon">🪟</div>
+                <div class="f-body">
+                    <h3>遺產系統橋接引擎</h3>
+                    <p>PowerShell 32-bit 腳本直接讀取 Access DB（CUB.MDB），MD5 差異偵測增量同步，已整合 33 家。新機構 onboarding 僅需設定 config。</p>
+                </div>
+                <span class="f-tag">Access DB → Firestore</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 技術護城河 ═══ -->
+    <section id="moat">
+        <div class="reveal"><div class="section-label">Technology Moat</div></div>
+        <div class="reveal"><h2>六道護城河，難以複製</h2></div>
+        <div class="reveal"><p class="desc">不是套 template 的專案 — 每一層都是真實的工程深度</p></div>
+
+        <div class="moat-grid">
+            <div class="moat-card reveal" style="--i:0">
+                <div class="m-icon">🤖</div>
+                <h3>AI RAG 管線</h3>
+                <p>Gemini 2.5 Flash + Pinecone 768 維向量記憶。角色提示工程（小助 persona）、3 秒超時保護、主/備模型自動路由、敏感關鍵字防護。不是串 API 而已，是完整的生產級 AI 架構。</p>
+                <div class="m-meta">chat.ts · ai.ts · memory.ts · pinecone.ts</div>
+            </div>
+            <div class="moat-card reveal" style="--i:1">
+                <div class="m-icon">🏢</div>
+                <h3>多租戶隔離架構</h3>
+                <p>300+ 家共用同一 Firebase 專案，但 coopId 查詢層級隔離，Firestore rules + server-side validation 雙重守護。橫向擴展到 300 家不需改架構。</p>
+                <div class="m-meta">33 家已設定 · 水平擴展零改動</div>
+            </div>
+            <div class="moat-card reveal" style="--i:2">
+                <div class="m-icon">🔐</div>
+                <h3>三種互斥驗證系統</h3>
+                <p>會員（LIFF ID token + 身分證末四碼，5 次鎖定 15 分鐘）、店家管理員（Firebase Auth）、機構專職幹部（custom claims 自癒機制）。同一套 Firebase 三種權限。</p>
+                <div class="m-meta">index.ts · AuthContext.tsx · officerClaim.ts</div>
+            </div>
+            <div class="moat-card reveal" style="--i:3">
+                <div class="m-icon">🪟</div>
+                <h3>遺產系統橋接</h3>
+                <p>1980 年代 Access DB → 2026 年 Firestore，MD5 差異偵測、孤立資料 soft-delete、JWT 直接簽署、Task Scheduler 自動化。這是真實世界數位轉型的硬功夫。</p>
+                <div class="m-meta">cub/sync_to_gas.ps1 · 474 行</div>
+            </div>
+            <div class="moat-card reveal" style="--i:4">
+                <div class="m-icon">👴</div>
+                <h3>銀髮友善 UX</h3>
+                <p>21px 預設字體（xlarge）、44px 最小觸控、LIFF 靜默續登（不強迫長輩重登）、iOS 縮放防護、reduced-motion 支援。每個細節都是 LINE WebView 踩坑的 know-how。</p>
+                <div class="m-meta">44px touch target · xlarge font default</div>
+            </div>
+            <div class="moat-card reveal" style="--i:5">
+                <div class="m-icon">🧪</div>
+                <h3>工程紀律</h3>
+                <p>320 項自動化測試（Jest + Vitest + Playwright E2E）、CI/CD 5 平行任務、Sentry 生產監控、ESLint + strict TypeScript、38 個測試檔覆蓋所有關鍵路徑。不是 prototype，是 production。</p>
+                <div class="m-meta">320 tests · 5 CI jobs · Sentry</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 商業模式 + Traction ═══ -->
+    <section id="business">
+        <div class="reveal"><div class="section-label">Business Model</div></div>
+        <div class="reveal"><h2>從免費到平台，四階段變現</h2></div>
+        <div class="reveal"><p class="desc">目前共購利潤分潤機制已內建，下一步是金流串接與商業化</p></div>
+
+        <div class="bm-path">
+            <div class="bm-card reveal" style="--i:0;border-color:rgba(34,211,238,0.15);">
+                <div class="bm-phase">Phase 1 · Now</div>
+                <h3>📡 SaaS 授權費</h3>
+                <p>每家機構每月固定訂閱。300 家 × NT$3,000/月 = <strong>NT$900,000/月</strong> 經常性收入。</p>
+                <div class="bm-rev">ARR 預估：NT$ 1,080 萬</div>
+            </div>
+            <div class="bm-card reveal" style="--i:1;border-color:rgba(251,146,60,0.15);">
+                <div class="bm-phase">Phase 2 · 金流串接後</div>
+                <h3>💳 共購交易抽成</h3>
+                <p>串接 LINE Pay + 虛擬帳號，每筆訂單抽 2-5%。20 萬會員 × 年均團購 NT$3,000 = NT$6 億 GMV。</p>
+                <div class="bm-rev">抽成 3% → NT$ 1,800 萬/年</div>
+            </div>
+            <div class="bm-card reveal" style="--i:2;border-color:rgba(129,140,248,0.15);">
+                <div class="bm-phase">Phase 3 · 生態成熟</div>
+                <h3>📢 特約商店曝光</h3>
+                <p>地圖排序、精選推薦、輪播廣告。全台特約商店每月付費曝光，店家自主上架管理。</p>
+                <div class="bm-rev">500 店家 × NT$1,000/月 = NT$ 600 萬/年</div>
+            </div>
+            <div class="bm-card reveal" style="--i:3;border-color:rgba(244,114,182,0.15);">
+                <div class="bm-phase">Phase 4 · 數據網絡</div>
+                <h3>📊 數據加值服務</h3>
+                <p>20 萬會員消費洞察、區域熱力圖、信用輔助評分。對金融機構、政府單位提供數據服務。</p>
+                <div class="bm-rev">數據授權 · 高毛利</div>
+            </div>
+        </div>
+
+        <div class="reveal" style="margin-top:30px;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;text-align:center;">
+                <div style="font-size:1.3rem;font-weight:700;margin-bottom:16px;">✅ 已驗證的 Traction</div>
+                <div class="traction-grid">
+                    <div class="traction-item">
+                        <div class="t-icon">🚀</div>
+                        <div class="t-num">2</div>
+                        <div class="t-label">已部署 APP</div>
+                    </div>
+                    <div class="traction-item">
+                        <div class="t-icon">🏢</div>
+                        <div class="t-num">33</div>
+                        <div class="t-label">已整合機構</div>
+                    </div>
+                    <div class="traction-item">
+                        <div class="t-icon">🧪</div>
+                        <div class="t-num">320</div>
+                        <div class="t-label">自動化測試</div>
+                    </div>
+                    <div class="traction-item">
+                        <div class="t-icon">📸</div>
+                        <div class="t-num">39</div>
+                        <div class="t-label">生產環境截圖</div>
+                    </div>
+                </div>
+                <div style="font-size:0.85rem;color:var(--text-dim);margin-top:10px;">
+                    🔗 已上線網址：<a href="https://special-stores-app-52e1c.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-app-52e1c.web.app</a>
+                    &nbsp;·&nbsp;
+                    <a href="https://special-stores-copurchase-app.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-copurchase-app.web.app</a>
+                    <br>
+                    📱 LIFF ID: <code style="color:var(--text-dim);font-size:0.75rem;">2009715141-4DtKQepj</code> · <code style="color:var(--text-dim);font-size:0.75rem;">2009715141-696S91su</code>
+                    <br>
+                    📊 Sentry 生產監控 · 🔄 CI/CD 5 平行任務 · 🏗️ Firebase + Gemini + Pinecone
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Roadmap ═══ -->
+    <section id="roadmap">
+        <div class="reveal"><div class="section-label">Roadmap</div></div>
+        <div class="reveal"><h2>從 33 家到 300 家到 20 萬活躍會員</h2></div>
+        <div class="reveal"><p class="desc">不是線性成長，而是網絡效應的指數曲線</p></div>
+
+        <div class="tl-wrap reveal">
+            <div class="tl-item">
+                <div class="dot"></div>
+                <div class="phase">Phase 1 · Now ~ 6 Months</div>
+                <h3>⚙️ 站穩：300 家全上線</h3>
+                <p>自助入會流程、幹部後台強化（公告/推播）、自動化同步儀表板、會員 onboarding 自助化。目標：300 家完成資料串接。</p>
+            </div>
+            <div class="tl-item">
+                <div class="dot"></div>
+                <div class="phase">Phase 2 · 6 ~ 18 Months</div>
+                <h3>💰 變現：金流 × 商業化</h3>
+                <p>串接 LINE Pay + 銀行虛擬帳號，共購從登記意願變成真收款。SaaS 月費上線，特約商店曝光方案推出。目標：ARR NT$ 1,000 萬+。</p>
+            </div>
+            <div class="tl-item">
+                <div class="dot"></div>
+                <div class="phase">Phase 3 · 18 ~ 36 Months</div>
+                <h3>🌐 網絡效應：互助經濟網絡</h3>
+                <p>跨機構團購、精準推薦（基於 20 萬會員數據）、開放 API 第三方上架、信用評分輔助。會員身份變成全台通用的互助經濟通行證。</p>
+            </div>
+            <div class="tl-item">
+                <div class="dot"></div>
+                <div class="phase">End State</div>
+                <h3>🎯 20 萬活躍會員 × 300 家 × 全台特約店</h3>
+                <p>台灣最大的 LINE 互助經濟生態系。會員在 LINE 上完成所有金融與生活服務，從找到店、買到便宜、到 AI 助理一條龍。新血自然流入，會員年齡持續下降。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <div class="cta">
+        <div class="reveal"><h2>一起打造台灣最大的<br>LINE 互助經濟網絡</h2></div>
+        <div class="reveal"><p>300 家 × 20 萬會員 × LINE AI 生態系<br>= 台灣下一世代的互助社群基礎建設</p></div>
+        <div class="reveal">
+            <div class="btn-group">
+                <a href="https://special-stores-app-52e1c.web.app" target="_blank" class="btn btn-primary">📱 實際體驗 Demo</a>
+                <a href="#" class="btn btn-secondary">📄 下載投資簡報</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>LINE AI 生態系 · 基層金融機構數位轉型引擎</p>
+        <p style="margin-top:4px;opacity:0.5;">已上線營運 · Powered by Firebase + Gemini + Pinecone</p>
+        <p style="margin-top:4px;opacity:0.3;">&copy; 2026 LINE AI 生態系 · Confidential</p>
+    </footer>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('nav a');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href').slice(1) === current);
+    });
+});
+
+navLinks.forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+            window.scrollTo({
+                top: target.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+</script>
+</body>
+</html>
