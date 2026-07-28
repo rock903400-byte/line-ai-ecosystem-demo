@@ -2,8 +2,13 @@
 
 > LINE AI 生態系 — 產品行銷頁（公開展示版）
 
-作品集 demo 頁面，介紹一套建構在 LINE 上的會員服務生態系：特約商店地圖、
-共購團購、會員中心點數任務，以及具記憶能力的 AI 助理。
+![LINE AI 生態系 預覽](https://rock903400-byte.github.io/wind/assets/line-ai-ecosystem.webp)
+
+## 📖 背景
+
+許多中小型企業以 LINE 官方帳號作為主要客戶觸及管道，卻缺乏預算導入完整 CRM 系統。
+本專案展示一套以 LINE 為核心的 AI 會員生態系：整合特約商店地圖、共購團購、會員
+點數任務，以及具記憶能力的 AI 助理，讓商家在 LINE 內即可完成完整的客戶經營流程。
 
 **Live demo**：<https://rock903400-byte.github.io/line-ai-ecosystem-demo/>
 
