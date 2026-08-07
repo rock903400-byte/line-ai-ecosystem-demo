@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  html-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify index.html exists
+        run: test -f index.html && echo "index.html OK"
+      - name: HTML basic structure check
+        run: |
+          grep -q "<!DOCTYPE html" index.html && echo "DOCTYPE OK"
+          grep -q "</html>" index.html && echo "closing tag OK"
+          grep -q "<title>" index.html && echo "title OK"
