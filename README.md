@@ -1,5 +1,7 @@
 # line-ai-ecosystem-demo
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 > LINE AI 生態系 — 產品行銷頁（公開展示版）
 
 ![LINE AI 生態系 預覽](https://rock903400-byte.github.io/wind/assets/line-ai-ecosystem.webp)
