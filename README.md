@@ -18,6 +18,7 @@
 
 - 單一 `index.html`，無建置流程、無相依套件（僅載入 Google Fonts）。
 - 頁面文案已去識別化，不含客戶名稱或產業專有用語。
+- 頁面數字採模糊表述（1,000+、多平行任務等），避免隨每次改動過期；內容截至 2026-09。
 - 實際系統技術棧：Firebase（Auth / Firestore / Hosting）+ LINE LIFF +
   Gemini + Pinecone；本 repo 僅含行銷頁，不含系統原始碼。
 

@@ -820,7 +820,7 @@
         </p>
         <div class="badges">
             <span class="badge"><span class="dot"></span> 已上線營運</span>
-            <span class="badge">📱 3 個 LINE App</span>
+            <span class="badge">📱 Hub 統一入口・單一登入</span>
             <span class="badge">🧪 1,000+ 項自動化測試</span>
             <span class="badge">🤖 Gemini AI + 記憶</span>
         </div>
@@ -873,8 +873,8 @@
     <!-- ═══ 產品展示 ═══ -->
     <section id="products">
         <div class="reveal"><div class="section-label">Products</div></div>
-        <div class="reveal"><h2>四大服務 · 一條 LINE 搞定</h2></div>
-        <div class="reveal"><p class="desc">不用下載 APP，LINE 裡直接體驗完整的會員數位服務</p></div>
+        <div class="reveal"><h2>四大服務 · Hub 統一入口</h2></div>
+        <div class="reveal"><p class="desc">一個 PWA 圖示、一次 LINE 登入，LINE 裡直接體驗完整的會員數位服務</p></div>
 
         <div class="reveal">
             <div class="line-flow">
@@ -882,7 +882,7 @@
                     <div class="step-num">1</div>
                     <div style="font-size:1.6rem;margin-bottom:10px;">🔗</div>
                     <h4>打開 LINE</h4>
-                    <p>從 LIFF 連結進入，不必下載 APP，打開即用</p>
+                    <p>從 LIFF 連結或 Hub PWA 圖示進入，打開即用</p>
                 </div>
                 <div class="flow-arrow">→</div>
                 <div class="flow-step">
@@ -895,8 +895,8 @@
                 <div class="flow-step">
                     <div class="step-num">3</div>
                     <div style="font-size:1.6rem;margin-bottom:10px;">🏠</div>
-                    <h4>四大服務入口</h4>
-                    <p>特約商店地圖 / 共購團購 / AI 小助 / 遊戲與互助任務，一站切換</p>
+                    <h4>Hub 統一入口</h4>
+                    <p>特約商店 / 共購團購 / 點數星球與互助任務 / 遊戲，一站切換（舊三站凍結保留、可一分鐘回退）</p>
                 </div>
             </div>
         </div>
@@ -1103,6 +1103,13 @@
                 <div class="phone-label">🎮 遊戲中心 · 互助任務與點數星球</div>
             </div>
         </div>
+
+        <div class="reveal" style="margin-top:24px;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;max-width:720px;margin:0 auto;">
+                <div style="font-size:1rem;font-weight:700;margin-bottom:8px;">📱 Hub 單一 PWA · 一次登入走透透</div>
+                <div style="font-size:0.85rem;color:var(--text-dim);line-height:1.8;">特約 <code style="font-size:0.75rem;">#/stores</code> · 共購 <code style="font-size:0.75rem;">#/coop</code> · 點數星球 <code style="font-size:0.75rem;">#/planet</code> · 互助任務 <code style="font-size:0.75rem;">#/tasks</code> · 遊戲 <code style="font-size:0.75rem;">#/games</code><br>三個 LIFF 共用同一個 Hub 入口（<code style="font-size:0.75rem;">?entry=</code> / <code style="font-size:0.75rem;">?dest=</code> 分流），分階段切換中，舊站全程保留可隨時回退。</div>
+            </div>
+        </div>
     </section>
 
     <!-- ═══ 核心功能 ═══ -->
@@ -1112,6 +1119,14 @@
         <div class="reveal"><p class="desc">不是取代原有機構，而是讓會員身份在 LINE 上更有價值</p></div>
 
         <div class="reveal">
+            <div class="feature-row">
+                <div class="f-icon">📱</div>
+                <div class="f-body">
+                    <h3>Hub 單一 PWA · 一次登入</h3>
+                    <p>三個獨立站台合併為單一 PWA：一個桌面圖示、一次 LINE 登入走透五大服務。可安裝到手機桌面、改版自動提示更新，舊站凍結保留、一分鐘可回退。</p>
+                </div>
+                <span class="f-tag">單一 PWA</span>
+            </div>
             <div class="feature-row">
                 <div class="f-icon">🏪</div>
                 <div class="f-body">
@@ -1200,7 +1215,7 @@
                 <div class="m-icon">🪟</div>
                 <h3>遺產系統橋接</h3>
                 <p>1980 年代 Access DB → 2026 年 Firestore，MD5 差異偵測、孤立資料 soft-delete、JWT 直接簽署、Task Scheduler 自動化。這是真實世界數位轉型的硬功夫。</p>
-                <div class="m-meta">cub/sync_to_gas.ps1 · 479 行</div>
+                <div class="m-meta">cub/sync_to_gas.ps1</div>
             </div>
             <div class="moat-card reveal" style="--i:4">
                 <div class="m-icon">👴</div>
@@ -1211,8 +1226,8 @@
             <div class="moat-card reveal" style="--i:5">
                 <div class="m-icon">🧪</div>
                 <h3>工程紀律</h3>
-                <p>1,000+ 項自動化測試（Jest + Vitest + Playwright E2E）、CI/CD 6 平行任務、Sentry 生產監控、ESLint + strict TypeScript、90+ 個測試檔覆蓋所有關鍵路徑。不是 prototype，是 production。</p>
-                <div class="m-meta">1,000+ tests · 6 CI jobs · Sentry</div>
+                <p>1,000+ 項自動化測試（Jest + Vitest + Playwright E2E）、多平行 CI 任務、Sentry 生產監控、ESLint + strict TypeScript 全面覆蓋關鍵路徑。不是 prototype，是 production。</p>
+                <div class="m-meta">1,000+ tests · 多平行 CI · Sentry</div>
             </div>
         </div>
     </section>
@@ -1255,31 +1270,29 @@
                 <div style="font-size:1.3rem;font-weight:700;margin-bottom:16px;">✅ 已驗證的 Traction · 通往 300 家規模</div>
                 <div class="traction-grid">
                     <div class="traction-item">
-                        <div class="t-icon">🎯</div>
-                        <div class="t-num">300+</div>
-                        <div class="t-label">目標合作機構</div>
-                    </div>
-                    <div class="traction-item">
-                        <div class="t-icon">🧪</div>
-                        <div class="t-num">1,000+</div>
-                        <div class="t-label">自動化測試</div>
-                    </div>
-                    <div class="traction-item">
                         <div class="t-icon">🚀</div>
                         <div class="t-num">已上線</div>
                         <div class="t-label">生產實測驗證</div>
                     </div>
+                    <div class="traction-item">
+                        <div class="t-icon">📱</div>
+                        <div class="t-num">Hub</div>
+                        <div class="t-label">單一 PWA 多站並行</div>
+                    </div>
+                    <div class="traction-item">
+                        <div class="t-icon">🔄</div>
+                        <div class="t-num">持續交付</div>
+                        <div class="t-label">自動化測試把關</div>
+                    </div>
                 </div>
                 <div style="font-size:0.85rem;color:var(--text-dim);margin-top:10px;">
-                    🔗 已上線網址：<a href="https://special-stores-app-52e1c.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-app-52e1c.web.app</a>
-                    &nbsp;·&nbsp;
-                    <a href="https://special-stores-copurchase-app.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-copurchase-app.web.app</a>
-                    &nbsp;·&nbsp;
-                    <a href="https://special-stores-games-app.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-games-app.web.app</a>
+                    🔗 統一入口：<a href="https://special-stores-hub.web.app" target="_blank" style="color:var(--green);text-decoration:none;">special-stores-hub.web.app</a>
+                    <br>
+                    <span style="font-size:0.75rem;opacity:0.7;">舊三站（過渡期保留）：special-stores-app-52e1c · special-stores-copurchase-app · special-stores-games-app</span>
                     <br>
                     📱 LIFF ID: <code style="color:var(--text-dim);font-size:0.75rem;">2009715141-4DtKQepj</code> · <code style="color:var(--text-dim);font-size:0.75rem;">2009715141-696S91su</code> · <code style="color:var(--text-dim);font-size:0.75rem;">2009715141-XTg1C5yt</code>
                     <br>
-                    📊 Sentry 生產監控 · 🔄 CI/CD 6 平行任務 · 🏗️ Firebase + Gemini + Pinecone
+                    📊 Sentry 生產監控 · 🔄 CI/CD 多平行任務 · 🏗️ Firebase + Gemini + Pinecone
                 </div>
             </div>
         </div>
@@ -1296,7 +1309,7 @@
                 <div class="dot"></div>
                 <div class="phase">Phase 1 · Now ~ 6 Months</div>
                 <h3>⚙️ 站穩：300 家全上線</h3>
-                <p>自助入會流程、幹部後台強化（公告/推播）、自動化同步儀表板、會員 onboarding 自助化。目標：300 家完成資料串接。</p>
+                <p>自助入會流程、幹部後台強化（公告/推播）、自動化同步儀表板、會員 onboarding 自助化。三站合併為 Hub 單一 PWA，分階段切換中（首站已切）。目標：300 家完成資料串接。</p>
             </div>
             <div class="tl-item">
                 <div class="dot"></div>
@@ -1325,7 +1338,7 @@
         <div class="reveal"><p>300 家 × 20 萬會員 × LINE AI 生態系<br>= 台灣下一世代的互助社群基礎建設</p></div>
         <div class="reveal">
             <div class="btn-group">
-                <a href="https://special-stores-app-52e1c.web.app" target="_blank" class="btn btn-primary">📱 實際體驗 Demo</a>
+                <a href="https://special-stores-hub.web.app" target="_blank" class="btn btn-primary">📱 實際體驗 Demo</a>
                 <a href="#" class="btn btn-secondary">📄 下載投資簡報</a>
             </div>
         </div>
